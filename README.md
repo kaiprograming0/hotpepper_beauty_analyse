@@ -75,4 +75,54 @@ for i in range(len(df)):
             keiyoushi_list.append(node.feature.split(',')[7])
         node = node.next
 ```
+#### wordcloudでの可視化
+```
+meishi_text = ' '.join(meishi_list)
+wordcloud = WordCloud(font_path='/Library/Fonts/Arial Unicode.ttf').generate(meishi_text)
+    
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.show()
+```
+
+#### tsneによる可視化
+```
+def draw_word_scatter(word, topn=30):
+
+    words = [x[0] for x in sorted(model.wv.most_similar(word, topn=topn))]
+    words.append(word)
+
+    vecs = [model.wv[word] for word in words]
+
+    draw_scatter_plot(vecs, words)
+
+def draw_scatter_plot(vecs, tags):
+    
+    pca = PCA(n_components=2)
+    coords = pca.fit_transform(vecs)
+
+    fig, ax = plt.subplots()
+    x = [v[0] for v in coords]
+    y = [v[1] for v in coords]
+
+    ax.scatter(x, y)
+
+    for i, txt in enumerate(tags):
+        ax.annotate(txt, (coords[i][0], coords[i][1]))
+
+    plt.show()
+```
+#### デンドログラムによる可視化
+```
+def draw_similar_word_dendrogram(word, topn=30):
+
+    words = [x[0] for x in sorted(model.wv.most_similar(word, topn=topn))]
+    words.append(word)
+
+    vecs = [model.wv[word] for word in words]
+
+    df = pd.DataFrame(vecs, index=words)
+    row_clusters = linkage(pdist(df, metric='euclidean'), method='complete')
+    dendrogram(row_clusters, labels=words)
+    plt.show()
+```
 

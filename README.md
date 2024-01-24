@@ -25,7 +25,7 @@ from scipy.cluster.hierarchy import linkage, dendrogram
 
 #### データの読み込み
 ```
-df = pd.rea_csv('ファイル名.csv')
+df = pd.read_csv('ファイル名.csv')
 ```
 #### 円グラフの出し方
 ```
